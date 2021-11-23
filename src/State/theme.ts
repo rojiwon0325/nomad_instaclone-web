@@ -1,8 +1,15 @@
 import { DefaultTheme } from "styled-components";
 
-export const theme: DefaultTheme = {
-    background: "rgba(47,54,64,1)",
-    bar: "rgba(57,64,74,1)",
-    text: "rgba(245,246,250,1)",
-    subtext: "rgba(245,246,250,0.8)",
+export const LightTheme: DefaultTheme = {
+    background: "rgb(255,255,255)",
+    bar: "rgb(242,242,242)",
+    text: "rgb(30,39,46)",
+    subtext: "rgba(30,39,46,0.8)",
+};
+
+export const DarkTheme: DefaultTheme = {
+    background: "rgb(30,39,46)",
+    bar: "rgb(18,18,18)",
+    text: "rgb(242,242,242)",
+    subtext: "rgba(242,242,242,0.8)",
 };

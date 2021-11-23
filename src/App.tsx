@@ -3,7 +3,7 @@ import { Route, Routes } from 'react-router';
 import { useRecoilState } from 'recoil';
 import { Home } from 'Routes';
 import { isDarkMode } from 'State/recoilState';
-import { theme } from 'State/theme';
+import { DarkTheme, LightTheme } from 'State/theme';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 
 
@@ -23,7 +23,7 @@ function App() {
   }, [setTheme]);
 
   return (
-    <ThemeProvider theme={isDark ? theme : theme}>
+    <ThemeProvider theme={isDark ? DarkTheme : LightTheme}>
       <GlobalStyle />
       <Routes>
         <Route path="/" element={<Home />}>
@@ -35,6 +35,14 @@ function App() {
   );
 }
 
-const GlobalStyle = createGlobalStyle``;
+const GlobalStyle = createGlobalStyle`
+  html{
+    background-color: ${props => props.theme.background};
+  }
+  *{
+    font-size: 16px;
+    color: ${props => props.theme.text}
+  }
+`;
 
 export default App as React.FC;

@@ -16,5 +16,22 @@ const server = createHttpLink({ uri: "http://localhost:4000/graphql" });
 
 export const client = new ApolloClient({
     link: auth.concat(server),
-    cache: new InMemoryCache(),
+    cache: new InMemoryCache({
+        typePolicies: {
+            Post: {
+                fields: {
+                    _count: {
+                        merge(existing = {}, incoming: {}) {
+                            return { ...existing, ...incoming };
+                        },
+                    },
+                    detail: {
+                        merge(existing = {}, incoming: {}) {
+                            return { ...existing, ...incoming };
+                        },
+                    }
+                },
+            },
+        },
+    }),
 });

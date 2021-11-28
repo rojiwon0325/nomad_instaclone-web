@@ -24,3 +24,42 @@ export const GETACCOUNT_QUERY = gql`
         getAccount
     }
 `;
+
+export const SEEPOST_QUERY = gql`
+    query seePost($id:Int $offset:Int){
+        seePost(id:$id offset:$offset) {
+            id
+            photo
+            _count{
+                like
+                comment
+                reComment
+            }
+            detail{
+                isMine
+                caption
+                account
+                isLiked
+                createdAt
+            }
+        }
+    }
+`;
+
+export const DOLIKE_MUTATION = gql`
+    mutation doLike($id: Int!){
+        doLike(id:$id){
+            ok
+            error
+        }
+    }
+`;
+
+export const DOUNLIKE_MUTATION = gql`
+mutation doUnLike($id: Int!){
+    doUnLike(id:$id){
+        ok
+        error
+    }
+}
+`;

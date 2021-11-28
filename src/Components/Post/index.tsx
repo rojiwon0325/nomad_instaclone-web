@@ -5,35 +5,31 @@ import Photos from "./Photos";
 import { Item } from "./PostPure";
 import Buttons from "./Buttons";
 import Text from "./Text";
+import { seePost_seePost, seePost_seePost_detail, seePost_seePost__count } from "Interfaces/Igql/seePost";
 
-const Post: React.FC = () => {
-    const info = [{
-        user: "welovecreativeteam",
-        text: `내 손으로 직접 만드는 피자.
-        우주인 피자키트 어벤져스 에디션
-        
-        혼자만의 시간, 가족과의 시간을 보낼 때,
-        그리고 캠핑 갈 때도 좋습니다.`
-    }, {
-        user: "welovecreativeteam",
-        text: `내 손으로 직접`
-    }];
+interface IPost extends seePost_seePost {
+    _count: seePost_seePost__count;
+    detail: seePost_seePost_detail;
+}
+
+const Post: React.FC<{ data: IPost }> = ({ data: { id, photo, _count, detail } }) => {
+    const date = new Date(Number(detail.createdAt)).toLocaleDateString("ko");
     return (
         <Container>
-            <PostHeader user="welovecreativeteam" imgPath="test.jpg" />
-            <Photos photos={["test.jpg", "test.jpg", "test.jpg", "test.jpg"]} />
+            <PostHeader user={detail.account} imgPath="test.jpg" />
+            <Photos photos={photo} />
             <Bottom>
-                <Buttons postId={1} />
+                <Buttons postId={id} isLiked={detail.isLiked} />
                 <LikeWrap>
                     <button>
-                        좋아요 {10}개
+                        좋아요 {_count.like}개
                     </button>
                 </LikeWrap>
                 <TextInfo>
-                    {info.map(({ user, text }, idx) => <Text user={user} text={text} key={user + idx} />)}
+                    <Text user={detail.account} text={detail.caption} key={id + "caption"} />
                 </TextInfo>
                 <CreatedAt>
-                    <time>21시간전</time>
+                    <time dateTime={date}>{date}</time>
                 </CreatedAt>
             </Bottom>
         </Container>

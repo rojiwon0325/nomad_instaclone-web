@@ -1,20 +1,67 @@
+import { useMutation, gql, ApolloCache } from "@apollo/client";
 import { faBookmark, faComment, faHeart, faPaperPlane } from "@fortawesome/free-regular-svg-icons";
 import { faHeart as SolidHeart } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
+import { doLike } from "Interfaces/Igql/doLike";
+import { doUnLike } from "Interfaces/Igql/doUnike";
+import { DOLIKE_MUTATION, DOUNLIKE_MUTATION } from "State/query";
 import styled from "styled-components";
 
 
-const Buttons: React.FC<{ postId: number }> = () => {
-    const [isLike, setLike] = useState(false);
-    const ClickHeart = () => { setLike(pre => !pre) };
+const Buttons: React.FC<{ postId: number, isLiked: boolean }> = ({ postId, isLiked }) => {
+    const updateFragment = (cache: ApolloCache<any>) => {
+        const id = `Post:${postId}`;
+        const fragment = gql`
+            fragment BSName on Post{
+                _count {
+                    like
+                },
+                detail {
+                    isLiked
+                }
+            }
+        `;
+        cache.updateFragment({ id, fragment }, (data: { _count: { like: number }, detail: { isLiked: boolean } } | null) => {
+            if (data) {
+                const { _count: { like }, detail: { isLiked } } = data;
+                return { _count: { like: isLiked ? like - 1 : like + 1 }, detail: { isLiked: !isLiked } }
+            }
+            return null;
+        });
+    };
+    const [doLike, { loading: loadingLike }] = useMutation<doLike>(DOLIKE_MUTATION, {
+        variables: { id: postId },
+        update: (cache, result) => {
+            if (result.data?.doLike.ok) {
+                updateFragment(cache);
+            }
+        }
+    });
+    const [doUnLike, { loading: loadingUnLike }] = useMutation<doUnLike>(DOUNLIKE_MUTATION, {
+        variables: { id: postId },
+        update: (cache, result) => {
+            if (result.data?.doUnLike.ok) {
+                updateFragment(cache);
+            }
+        }
+    });
+    const ClickHeart = () => {
+        if (loadingLike || loadingUnLike) {
+            return;
+        }
+        if (isLiked) {
+            doUnLike();
+        } else {
+            doLike();
+        }
+    };
     const ClickComment = () => { console.log("comment") };
     const ClickShare = () => { console.log("share") };
     const ClickBookmark = () => { console.log("bookmark") };
     return (
         <Btns>
             <button onClick={ClickHeart}>
-                <FontAwesomeIcon style={{ color: isLike ? "red" : "inherit" }} icon={isLike ? SolidHeart : faHeart} size="lg" />
+                <FontAwesomeIcon style={{ color: isLiked ? "red" : "inherit" }} icon={isLiked ? SolidHeart : faHeart} size="lg" />
             </button>
             <button onClick={ClickComment}>
                 <FontAwesomeIcon icon={faComment} size="lg" />

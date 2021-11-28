@@ -50,6 +50,7 @@ const Setting = styled.div`
     justify-content: center;
     padding-right: 8px;
     flex-shrink: 0;
+    pointer-events: all;
     button{
         display: flex;
         align-items: center;

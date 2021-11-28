@@ -1,15 +1,47 @@
-import React from 'react';
-import { Outlet } from 'react-router-dom';
+import useAccount from 'Hooks/useAccount';
+import React, { useEffect } from 'react';
+import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
+import Header from './Header';
+import Title from './Title';
 
-function Layout() {
+const Layout: React.FC = () => {
+    const navigate = useNavigate();
+    const { pathname } = useLocation();
+    const token = useAccount();
+
+    useEffect(() => {
+        if (pathname.includes('login') || pathname.includes('join')) {
+            if (token) {
+                navigate("/");
+            }
+        } else {
+            if (!token) {
+                navigate("/login");
+            }
+        }
+    }, [navigate, pathname, token]);
+
     return (
-        <Container>
-            <Outlet />
-        </Container>
+        <>
+            {pathname.includes('login') || pathname.includes('join') ? null
+                : <><div style={{ paddingTop: 54 }} /><Header /></>}
+            <Container>
+                <Title />
+                <Outlet />
+            </Container>
+        </>
     );
+
 };
 
-const Container = styled.div``;
+const Container = styled.main`
+    min-width: 100vw;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    order: 4;
+`;
 
-export default Layout as React.FC;
+export default Layout;

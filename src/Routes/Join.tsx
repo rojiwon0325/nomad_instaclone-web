@@ -8,7 +8,7 @@ import { newAccount } from 'Interfaces/Igql/newAccount';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { NEWACCOUNT_MUTATION } from 'State/query';
+import { NEWACCOUNT_MUTATION } from 'State/Query/account';
 
 interface IJoin {
     result: string;

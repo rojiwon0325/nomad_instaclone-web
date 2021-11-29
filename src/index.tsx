@@ -3,25 +3,18 @@ import ReactDOM from 'react-dom';
 import reportWebVitals from 'reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
-import { RecoilRoot } from 'recoil';
 import App from 'App';
-import { ApolloProvider } from '@apollo/client';
-import { client } from 'State/apollo';
-import { CookiesProvider } from 'react-cookie';
+import { RecoilRoot } from 'recoil';
 
 ReactDOM.render(
   <React.StrictMode>
-    <ApolloProvider client={client}>
-      <CookiesProvider>
-        <HelmetProvider>
-          <BrowserRouter>
-            <RecoilRoot>
-              <App />
-            </RecoilRoot>
-          </BrowserRouter>
-        </HelmetProvider>
-      </CookiesProvider>
-    </ApolloProvider>
+    <HelmetProvider>
+      <BrowserRouter>
+        <RecoilRoot>
+          <App />
+        </RecoilRoot>
+      </BrowserRouter>
+    </HelmetProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

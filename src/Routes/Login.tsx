@@ -8,8 +8,10 @@ import { login } from 'Interfaces/Igql/login';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
 import { setCookie } from 'State/cookie';
-import { LOGIN_MUTATION } from 'State/query';
+import { LOGIN_MUTATION } from 'State/Query/account';
+import { MyAccount } from 'State/recoilState';
 
 interface ILogin {
     result: string;
@@ -19,8 +21,9 @@ interface ILogin {
 
 const Login: React.FC = () => {
     const navigate = useNavigate();
+    const setMyAccount = useSetRecoilState(MyAccount);
     const { state }: { state: null | { account: string, password: string } } = useLocation();
-    const { register, handleSubmit, formState: { isValid, errors }, setError, clearErrors } = useForm<ILogin>({
+    const { register, handleSubmit, formState: { isValid, errors }, setError, clearErrors, getValues } = useForm<ILogin>({
         mode: "onChange",
         defaultValues: {
             account: state?.account ?? "",
@@ -37,6 +40,8 @@ const Login: React.FC = () => {
                     secure: true,
                     sameSite: "none"
                 });
+                const { account } = getValues();
+                setMyAccount(account);
                 navigate("/");
             } else {
                 setError("result", { message: error ?? undefined });

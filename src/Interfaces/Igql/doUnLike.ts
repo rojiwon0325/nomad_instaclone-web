@@ -4,19 +4,20 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL mutation operation: doUnike
+// GraphQL mutation operation: doUnLike
 // ====================================================
 
 export interface doUnLike_doUnLike {
   __typename: "LikeResult";
   ok: boolean;
   error: string | null;
+  type: boolean | null;
 }
 
 export interface doUnLike {
   doUnLike: doUnLike_doUnLike;
 }
 
-export interface doUnikeVariables {
+export interface doUnLikeVariables {
   id: number;
 }

@@ -1,6 +1,8 @@
-import useAccount from 'Hooks/useAccount';
 import React, { useEffect } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
+import { useRecoilValue, useRecoilState } from 'recoil';
+import { removeCookie } from 'State/cookie';
+import { getMyAccount, MyAccount } from 'State/recoilState';
 import styled from 'styled-components';
 import Header from './Header';
 import Title from './Title';
@@ -8,19 +10,26 @@ import Title from './Title';
 const Layout: React.FC = () => {
     const navigate = useNavigate();
     const { pathname } = useLocation();
-    const token = useAccount();
+    const [account, setAccount] = useRecoilState(MyAccount);
+    const getAccount = useRecoilValue(getMyAccount);
 
     useEffect(() => {
-        if (pathname.includes('login') || pathname.includes('join')) {
-            if (token) {
+        if (getAccount) {
+            if (pathname.includes('login') || pathname.includes('join')) {
                 navigate("/");
             }
+        } else if (account) {
+            removeCookie('jwt');
+            setAccount(null);
+            if (!pathname.includes('login') && !pathname.includes('join')) {
+                navigate("/login");
+            }
         } else {
-            if (!token) {
+            if (!pathname.includes('login') && !pathname.includes('join')) {
                 navigate("/login");
             }
         }
-    }, [navigate, pathname, token]);
+    }, [navigate, pathname, account, setAccount, getAccount]);
 
     return (
         <>

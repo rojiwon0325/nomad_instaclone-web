@@ -14,13 +14,30 @@ export interface seePost_seePost__count {
   reComment: number;
 }
 
+export interface seePost_seePost_detail_comments__count {
+  __typename: "Comment_count";
+  reComment: number;
+}
+
+export interface seePost_seePost_detail_comments {
+  __typename: "Comment";
+  id: number;
+  text: string[];
+  rootId: string | null;
+  account: string;
+  createdAt: string;
+  _count: seePost_seePost_detail_comments__count | null;
+  isMine: boolean;
+}
+
 export interface seePost_seePost_detail {
   __typename: "Post_detail";
   isMine: boolean;
-  caption: string;
+  caption: string[];
   account: string;
   isLiked: boolean;
   createdAt: string;
+  comments: seePost_seePost_detail_comments[];
 }
 
 export interface seePost_seePost {

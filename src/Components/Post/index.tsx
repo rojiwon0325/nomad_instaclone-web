@@ -6,31 +6,41 @@ import { Item } from "./PostPure";
 import Buttons from "./Buttons";
 import Text from "./Text";
 import { seePost_seePost, seePost_seePost_detail, seePost_seePost__count } from "Interfaces/Igql/seePost";
+import { SEECOMMENT_QUERY } from "State/Query/post";
+import { useQuery } from "@apollo/client";
+import { seeComment } from "Interfaces/Igql/seeComment";
+import CommentInput from "./CommentInput";
 
 interface IPost extends seePost_seePost {
     _count: seePost_seePost__count;
     detail: seePost_seePost_detail;
 }
 
-const Post: React.FC<{ data: IPost }> = ({ data: { id, photo, _count, detail } }) => {
+const Post: React.FC<{ data: IPost }> = ({ data: { id: postId, photo, _count, detail } }) => {
     const date = new Date(Number(detail.createdAt)).toLocaleDateString("ko");
+    const { data: commentData } = useQuery<seeComment>(SEECOMMENT_QUERY, {
+        variables: { postId, take: 3 },
+    });
     return (
         <Container>
             <PostHeader user={detail.account} imgPath="test.jpg" />
             <Photos photos={photo} />
             <Bottom>
-                <Buttons postId={id} isLiked={detail.isLiked} />
+                <Buttons postId={postId} isLiked={detail.isLiked} />
                 <LikeWrap>
                     <button>
                         좋아요 {_count.like}개
                     </button>
                 </LikeWrap>
                 <TextInfo>
-                    <Text user={detail.account} text={detail.caption} key={id + "caption"} />
+                    <Text user={detail.account} text={detail.caption} key={postId + "caption"} />
+                    {commentData?.seeComment?.map(({ account, text, id }) => <Text user={account} text={text} id={id} key={id + "comment"} />)}
+                    {detail.comments.map(({ account, text, id }) => <Text user={account} text={text} id={id} key={id + "comment"} />)}
                 </TextInfo>
                 <CreatedAt>
                     <time dateTime={date}>{date}</time>
                 </CreatedAt>
+                <CommentInput postId={postId} />
             </Bottom>
         </Container>
     );

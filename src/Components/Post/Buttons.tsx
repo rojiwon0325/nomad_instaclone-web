@@ -1,63 +1,51 @@
-import { useMutation, gql, ApolloCache } from "@apollo/client";
+import { useMutation, ApolloCache } from "@apollo/client";
 import { faBookmark, faComment, faHeart, faPaperPlane } from "@fortawesome/free-regular-svg-icons";
 import { faHeart as SolidHeart } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { doLike } from "Interfaces/Igql/doLike";
-import { doUnLike } from "Interfaces/Igql/doUnike";
-import { DOLIKE_MUTATION, DOUNLIKE_MUTATION } from "State/query";
+import { doUnLike } from "Interfaces/Igql/doUnLike";
+import { seePost_seePost_detail, seePost_seePost__count } from "Interfaces/Igql/seePost";
+import { DOLIKE_MUTATION, DOUNLIKE_MUTATION } from "State/Query/post";
 import styled from "styled-components";
 
 
 const Buttons: React.FC<{ postId: number, isLiked: boolean }> = ({ postId, isLiked }) => {
-    const updateFragment = (cache: ApolloCache<any>) => {
-        const id = `Post:${postId}`;
-        const fragment = gql`
-            fragment BSName on Post{
-                _count {
-                    like
-                },
-                detail {
-                    isLiked
-                }
+    const updateCache = (cache: ApolloCache<any>, type: boolean | null) =>
+        cache.modify({
+            id: `Post:${postId}`, fields: {
+                _count: (prev: seePost_seePost__count) => ({
+                    ...prev,
+                    like: type === null ? prev.like : type ? prev.like + 1 : prev.like - 1
+                }),
+                detail: (prev: seePost_seePost_detail) => ({ ...prev, isLiked: type ?? prev.isLiked }),
+
             }
-        `;
-        cache.updateFragment({ id, fragment }, (data: { _count: { like: number }, detail: { isLiked: boolean } } | null) => {
-            if (data) {
-                const { _count: { like }, detail: { isLiked } } = data;
-                return { _count: { like: isLiked ? like - 1 : like + 1 }, detail: { isLiked: !isLiked } }
-            }
-            return null;
         });
-    };
+
     const [doLike, { loading: loadingLike }] = useMutation<doLike>(DOLIKE_MUTATION, {
         variables: { id: postId },
         update: (cache, result) => {
-            if (result.data?.doLike.ok) {
-                updateFragment(cache);
+            if (result.data?.doLike.ok || result.data?.doLike.error === "P2002") {
+                updateCache(cache, result.data.doLike.type);
             }
         }
     });
     const [doUnLike, { loading: loadingUnLike }] = useMutation<doUnLike>(DOUNLIKE_MUTATION, {
         variables: { id: postId },
         update: (cache, result) => {
-            if (result.data?.doUnLike.ok) {
-                updateFragment(cache);
+            if (result.data?.doUnLike.ok || result.data?.doUnLike.error === "P2025") {
+                updateCache(cache, result.data.doUnLike.type);
             }
         }
     });
     const ClickHeart = () => {
-        if (loadingLike || loadingUnLike) {
-            return;
-        }
-        if (isLiked) {
-            doUnLike();
-        } else {
-            doLike();
-        }
+        if (loadingLike || loadingUnLike) { return; }
+        return isLiked ? doUnLike() : doLike();
     };
     const ClickComment = () => { console.log("comment") };
     const ClickShare = () => { console.log("share") };
     const ClickBookmark = () => { console.log("bookmark") };
+
     return (
         <Btns>
             <button onClick={ClickHeart}>

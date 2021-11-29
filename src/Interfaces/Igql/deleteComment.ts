@@ -4,20 +4,19 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL mutation operation: doLike
+// GraphQL mutation operation: deleteComment
 // ====================================================
 
-export interface doLike_doLike {
-  __typename: "LikeResult";
+export interface deleteComment_deleteComment {
+  __typename: "ResultToken";
   ok: boolean;
   error: string | null;
-  type: boolean | null;
 }
 
-export interface doLike {
-  doLike: doLike_doLike;
+export interface deleteComment {
+  deleteComment: deleteComment_deleteComment;
 }
 
-export interface doLikeVariables {
+export interface deleteCommentVariables {
   id: number;
 }

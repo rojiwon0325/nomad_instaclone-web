@@ -4,9 +4,9 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: getAccount
+// GraphQL query operation: getMe
 // ====================================================
 
-export interface getAccount {
-  getAccount: boolean;
+export interface getMe {
+  getMe: string | null;
 }

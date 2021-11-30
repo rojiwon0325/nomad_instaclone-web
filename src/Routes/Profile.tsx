@@ -21,10 +21,27 @@ const Profile: React.FC = () => {
     const [follow] = useMutation<requestFollow>(REQUESTFOLLOW_MUTATION, { variables: { account }, refetchQueries });
     const [unfollow] = useMutation<deleteFollowing>(DELETEFOLLOWING_MUTATION, { variables: { account }, refetchQueries });
 
+    const getBtn = (prop: { isMe: boolean | null, isFollowing: boolean | null, isRequesting: boolean | null }) => {
+        const { isMe, isFollowing, isRequesting } = prop;
+        if (isMe === null || isFollowing === null || isRequesting === null) {
+            return null;
+        }
+        if (isMe) {
+            return <Btn>프로필 편집</Btn>;
+        } else if (isFollowing) {
+            return <Btn onClick={() => unfollow()}>팔로우 취소</Btn>;
+        } else if (isRequesting) {
+            return <Btn disabled>팔로우 요청중</Btn>;
+        } else {
+            return <Btn onClick={() => follow()}>팔로우 요청</Btn>;
+        }
+
+    };
+
     if (data === undefined || data.seeProfile === null) {
-        return <div>USER NOT FOUND"</div>;
+        return <div>USER NOT FOUND</div>;
     }
-    const { seeProfile: { avatarUrl, account: user, profile, username, isFollowing, isMe } } = data;
+    const { seeProfile: { avatarUrl, account: user, profile, username, isFollowing, isMe, isRequesting } } = data;
     return (
         <Container>
             <Info>
@@ -34,7 +51,7 @@ const Profile: React.FC = () => {
                 <UserInfo>
                     <InfoRow>
                         <Account>{user}</Account>
-                        {isMe ? <Btn>프로필 편집</Btn> : isFollowing ? <Btn onClick={() => unfollow()}>팔로우 취소</Btn> : <Btn onClick={() => follow()}>팔로우 요청</Btn>}
+                        {getBtn({ isMe, isFollowing, isRequesting })}
                     </InfoRow>
                     {profile?._count ?
                         <CountSection>

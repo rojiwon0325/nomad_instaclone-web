@@ -7,6 +7,7 @@ export const USER_FRAGMENT = gql`
         avatarUrl
         isMe
         isFollowing
+        isRequesting
         profile{
             isPublic
             bio

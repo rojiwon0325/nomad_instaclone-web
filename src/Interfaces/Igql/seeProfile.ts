@@ -28,6 +28,7 @@ export interface seeProfile_seeProfile {
   avatarUrl: string;
   isMe: boolean | null;
   isFollowing: boolean | null;
+  isRequesting: boolean | null;
   profile: seeProfile_seeProfile_profile | null;
 }
 

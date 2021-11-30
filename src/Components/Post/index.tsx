@@ -9,10 +9,11 @@ import { SEECOMMENT_QUERY } from "State/Query/post";
 import { useQuery } from "@apollo/client";
 import { seeComment } from "Interfaces/Igql/seeComment";
 import CommentInput from "./CommentInput";
-import { Post as IPost_pre, Post_detail, Post__count } from "Interfaces/Igql/Post";
+import { Feed, Feed__count } from "Interfaces/Igql/Feed";
+import { Post_detail } from "Interfaces/Igql/Post_detail";
 
-interface IPost extends IPost_pre {
-    _count: Post__count;
+interface IPost extends Feed {
+    _count: Feed__count;
     detail: Post_detail;
 }
 

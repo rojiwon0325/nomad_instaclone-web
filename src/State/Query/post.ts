@@ -14,9 +14,23 @@ export const COMMENT_FRAGMENT = gql`
     }
 `;
 
+export const POSTDETAIL_FRAGMENT = gql`
+    fragment Post_detail on Post_detail{
+        isMine
+        caption
+        account
+        isLiked
+        createdAt
+        avatarUrl
+        comments{
+            ...Comment
+        }
+    }
+    ${COMMENT_FRAGMENT}
+`;
 
-export const POST_FRAGMENT = gql`
-    fragment Post on Post{
+export const FEED_FRAGMENT = gql`
+    fragment Feed on Post{
         id
         photo
         _count{
@@ -24,28 +38,20 @@ export const POST_FRAGMENT = gql`
             comment
             reComment
         }
-        detail{
-            isMine
-            caption
-            account
-            isLiked
-            createdAt
-            avatarUrl
-            comments{
-                ...Comment
-            }
-        }
     }
-    ${COMMENT_FRAGMENT}
 `;
 
 export const SEEPOST_QUERY = gql`
     query seePost($id:Int $offset:Int){
         seePost(id:$id offset:$offset){
-            ...Post
+            ...Feed
+            detail{
+                ...Post_detail
+            }
         }
     }
-    ${POST_FRAGMENT}
+    ${FEED_FRAGMENT}
+    ${POSTDETAIL_FRAGMENT}
 `;
 
 export const DOLIKE_MUTATION = gql`
@@ -102,8 +108,8 @@ export const NEWCOMMENT_MUTATION = gql`
 export const SEEFEED_QUERY = gql`
     query seeFeed($account:String! $offset:Int){
         seeFeed(account:$account, offset: $offset){
-            ...Post
+            ...Feed
         }
     }
-    ${POST_FRAGMENT}
+    ${FEED_FRAGMENT}
 `;

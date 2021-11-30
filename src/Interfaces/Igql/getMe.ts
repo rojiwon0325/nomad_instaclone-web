@@ -28,6 +28,7 @@ export interface getMe_getMe {
   avatarUrl: string;
   isMe: boolean | null;
   isFollowing: boolean | null;
+  isRequesting: boolean | null;
   profile: getMe_getMe_profile | null;
 }
 

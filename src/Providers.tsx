@@ -13,13 +13,9 @@ import { ThemeProvider } from 'styled-components';
 const Provider: React.FC = ({ children }) => {
     const [isDark, setTheme] = useRecoilState(isDarkMode);
     useEffect(() => {
-        const handleChange = (e: MediaQueryListEvent) => {
-            setTheme(e.matches);
-        }
-
+        const handleChange = (e: MediaQueryListEvent) => { setTheme(e.matches); }
         window.matchMedia('(prefers-color-scheme: dark)')
             .addEventListener("change", handleChange);
-
         return window.matchMedia('(prefers-color-scheme: dark)')
             .removeEventListener("change", handleChange);
     }, [setTheme]);

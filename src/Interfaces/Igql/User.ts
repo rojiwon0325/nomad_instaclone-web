@@ -28,5 +28,6 @@ export interface User {
   avatarUrl: string;
   isMe: boolean | null;
   isFollowing: boolean | null;
+  isRequesting: boolean | null;
   profile: User_profile | null;
 }

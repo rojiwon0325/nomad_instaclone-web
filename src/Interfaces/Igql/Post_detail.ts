@@ -4,15 +4,8 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL fragment: Post
+// GraphQL fragment: Post_detail
 // ====================================================
-
-export interface Post__count {
-  __typename: "Post_count";
-  like: number;
-  comment: number;
-  reComment: number;
-}
 
 export interface Post_detail_comments__count {
   __typename: "Comment_count";
@@ -39,12 +32,4 @@ export interface Post_detail {
   createdAt: string;
   avatarUrl: string;
   comments: Post_detail_comments[];
-}
-
-export interface Post {
-  __typename: "Post";
-  id: number;
-  photo: string[];
-  _count: Post__count | null;
-  detail: Post_detail | null;
 }

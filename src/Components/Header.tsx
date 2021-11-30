@@ -1,8 +1,10 @@
+import { faHome } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Header: React.FC = () => {
-
     return (
         <Absolute>
             <HeaderContainer>
@@ -10,7 +12,11 @@ const Header: React.FC = () => {
                     Header
                     <Left />
                     <Center />
-                    <Right />
+                    <Right>
+                        <Link to="/">
+                            <FontAwesomeIcon icon={faHome} size="lg" />
+                        </Link>
+                    </Right>
                 </HeaderContent>
             </HeaderContainer>
         </Absolute>

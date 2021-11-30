@@ -19,7 +19,7 @@ interface IPost extends seePost_seePost {
 const Post: React.FC<{ data: IPost }> = ({ data: { id: postId, photo, _count, detail } }) => {
     const date = new Date(Number(detail.createdAt)).toLocaleDateString("ko");
     const { data: commentData } = useQuery<seeComment>(SEECOMMENT_QUERY, {
-        variables: { postId, take: 3 },
+        variables: { postId, take: 2 },
     });
     return (
         <Container>

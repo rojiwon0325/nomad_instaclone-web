@@ -1,7 +1,7 @@
 import React, { Suspense, useEffect } from 'react';
 import { HelmetProvider } from 'react-helmet-async';
 import { BrowserRouter } from "react-router-dom";
-import { RecoilRoot, useRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import { isDarkMode } from 'State/recoilState';
 import { DarkTheme, LightTheme } from 'State/theme';
 import { ApolloProvider } from '@apollo/client';
@@ -26,17 +26,15 @@ const Provider: React.FC = ({ children }) => {
     return (
         <HelmetProvider>
             <BrowserRouter>
-                <RecoilRoot>
-                    <ApolloProvider client={client}>
-                        <CookiesProvider>
-                            <ThemeProvider theme={isDark ? DarkTheme : LightTheme}>
-                                <Suspense fallback={<div>suspending...</div>}>
-                                    {children}
-                                </Suspense>
-                            </ThemeProvider>
-                        </CookiesProvider>
-                    </ApolloProvider>
-                </RecoilRoot>
+                <ApolloProvider client={client}>
+                    <CookiesProvider>
+                        <ThemeProvider theme={isDark ? DarkTheme : LightTheme}>
+                            <Suspense fallback={<div>suspending...</div>}>
+                                {children}
+                            </Suspense>
+                        </ThemeProvider>
+                    </CookiesProvider>
+                </ApolloProvider>
             </BrowserRouter>
         </HelmetProvider>
     )

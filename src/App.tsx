@@ -1,11 +1,10 @@
-import { ApolloProvider } from '@apollo/client';
 import React from 'react';
 import { createGlobalStyle } from 'styled-components';
 import reset from 'styled-reset';
 import Provider from 'Providers';
 import { Route, Routes, Navigate } from 'react-router-dom';
 import { Layout } from 'Components';
-import { Home, Join, Login } from 'Routes';
+import { Home, Join, Login, Profile } from 'Routes';
 
 const App: React.FC = () => (
   <Provider>
@@ -13,6 +12,7 @@ const App: React.FC = () => (
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route index element={<Home />} />
+        <Route path=":account" element={<Profile />} />
         <Route path="login" element={<Login />} />
         <Route path="join" element={<Join />} />
         <Route path="*" element={<Navigate replace to="/" />} />

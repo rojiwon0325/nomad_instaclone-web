@@ -44,8 +44,16 @@ const CommentInput: React.FC<{ postId: number, rootId?: number }> = ({ postId, r
 
     });
     return (
-        <Container onSubmit={handleSubmit(({ text }) => loading ? null : newComment({ variables: { postId, rootId, text } }))}>
-            <Form>
+        <Container onSubmit={(e) => {
+            const form = e.currentTarget.firstElementChild;
+            if (form && form.tagName === "FORM") {
+                const target = form.firstElementChild;
+                if (target && target.tagName === "TEXTAREA") {
+                    target.setAttribute("style", "height:18px;");
+                }
+            }
+        }}>
+            <Form onSubmit={handleSubmit(({ text }) => loading ? null : newComment({ variables: { postId, rootId, text } }))}>
                 <TextArea
                     {...textRegister}
                     onChange={

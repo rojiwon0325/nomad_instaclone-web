@@ -29,7 +29,8 @@ const Photos: React.FC<{ photos: string[] }> = ({ photos }) => {
                         <Btn style={{ right: 0 }} onClick={() => onClick(true)} />
                     </Photo>))}
             </PhotoList>
-            <Pagination page={page}>{photos.map((_, idx) => <div key={idx} />)}</Pagination>
+            {photos.length <= 1 ? null :
+                <Pagination page={page}>{photos.map((_, idx) => <div key={idx} />)}</Pagination>}
         </Item>
     );
 };

@@ -7,9 +7,7 @@ import Post from 'Components/Post';
 
 const Home: React.FC = () => {
     const [posts, setPosts] = useState<seePost_seePost[]>([]);
-    const { data } = useQuery<seePost>(SEEPOST_QUERY, {
-        variables: { id: 2 }
-    });
+    const { data } = useQuery<seePost>(SEEPOST_QUERY);
     useEffect(() => {
         if (data && data.seePost) {
             setPosts(data.seePost);
@@ -25,10 +23,6 @@ const Home: React.FC = () => {
             width: "100vw",
         }}>
             <div style={{ paddingTop: 30 }}>
-                {posts.map(({ __typename, id, photo, _count, detail }) =>
-                    _count && detail
-                        ? (<Post key={id} data={{ __typename, id, photo, _count, detail }} />)
-                        : null)}
                 {posts.map(({ __typename, id, photo, _count, detail }) =>
                     _count && detail
                         ? (<Post key={id} data={{ __typename, id, photo, _count, detail }} />)

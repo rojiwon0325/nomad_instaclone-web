@@ -19,7 +19,6 @@ export const USER_FRAGMENT = gql`
     }
 `;
 
-
 export const LOGIN_MUTATION = gql`
     mutation login($account:String! $password:String!){
         login(account: $account password:$password){
@@ -55,4 +54,22 @@ export const SEEPROFILE_QUERY = gql`
         }
     }
     ${USER_FRAGMENT}
+`;
+
+export const REQUESTFOLLOW_MUTATION = gql`
+    mutation requestFollow($account:String!){
+        requestFollow(account: $account){
+            ok
+            error
+        }
+    }
+`;
+
+export const DELETEFOLLOWING_MUTATION = gql`
+    mutation deleteFollowing($account:String!){
+        deleteFollowing(account: $account){
+            ok
+            error
+        }
+    }
 `;

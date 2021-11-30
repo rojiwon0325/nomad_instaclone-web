@@ -34,7 +34,7 @@ export const Button = styled.button`
     border-radius: 4px;
     position: relative;
     color: white;
-    padding: 5px 9px;
+    padding: 5px 12px;
     text-align: center;
     text-overflow: ellipsis;
     cursor: pointer;

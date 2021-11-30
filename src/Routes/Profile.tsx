@@ -1,26 +1,30 @@
-import { useApolloClient, useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { faComment, faHeart } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Avatar } from "Components";
+import { Avatar, Default } from "Components";
+import { deleteFollowing } from "Interfaces/Igql/deleteFollowing";
+import { requestFollow } from "Interfaces/Igql/requestFollow";
 import { seeFeed } from "Interfaces/Igql/seeFeed";
 import { seeProfile } from "Interfaces/Igql/seeProfile";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
-import { SEEPROFILE_QUERY } from "State/Query/account";
+import { DELETEFOLLOWING_MUTATION, GETME_QUERY, REQUESTFOLLOW_MUTATION, SEEPROFILE_QUERY } from "State/Query/account";
 import { SEEFEED_QUERY } from "State/Query/post";
 import styled from "styled-components";
 
 
 const Profile: React.FC = () => {
     const { account } = useParams();
-    const client = useApolloClient();
     const { data } = useQuery<seeProfile>(SEEPROFILE_QUERY, { variables: { account } });
     const { data: feedData } = useQuery<seeFeed>(SEEFEED_QUERY, { variables: { account } });
-    //console.log(data);
+    const refetchQueries = [{ query: SEEPROFILE_QUERY, variables: { account } }, { query: GETME_QUERY }];
+    const [follow] = useMutation<requestFollow>(REQUESTFOLLOW_MUTATION, { variables: { account }, refetchQueries });
+    const [unfollow] = useMutation<deleteFollowing>(DELETEFOLLOWING_MUTATION, { variables: { account }, refetchQueries });
+
     if (data === undefined || data.seeProfile === null) {
-        return null;
+        return <div>USER NOT FOUND"</div>;
     }
-    const { seeProfile: { avatarUrl, account: user, profile, username } } = data;
+    const { seeProfile: { avatarUrl, account: user, profile, username, isFollowing, isMe } } = data;
     return (
         <Container>
             <Info>
@@ -30,12 +34,13 @@ const Profile: React.FC = () => {
                 <UserInfo>
                     <InfoRow>
                         <Account>{user}</Account>
+                        {isMe ? <Btn>프로필 편집</Btn> : isFollowing ? <Btn onClick={() => unfollow()}>팔로우 취소</Btn> : <Btn onClick={() => follow()}>팔로우 요청</Btn>}
                     </InfoRow>
                     {profile?._count ?
                         <CountSection>
                             <Count>게시물 {profile._count.post}</Count>
                             <Count>팔로워 {profile._count.follower}</Count>
-                            <Count>필로우 {profile._count.following}</Count>
+                            <Count>팔로우 {profile._count.following}</Count>
                         </CountSection>
                         : null}
                     <InfoRow>
@@ -50,7 +55,7 @@ const Profile: React.FC = () => {
                 <CountInfo>
                     <Count>게시물 {profile._count.post}</Count>
                     <Count>팔로워 {profile._count.follower}</Count>
-                    <Count>필로우 {profile._count.following}</Count>
+                    <Count>팔로우 {profile._count.following}</Count>
                 </CountInfo>
                 : null}
             <Feed>
@@ -75,6 +80,16 @@ const Profile: React.FC = () => {
         </Container>
     );
 };
+
+const Btn = styled(Default.Button)`
+    width: auto;
+    margin-left: 20px;
+    @media only screen and (max-width:735px){
+        margin: 7px 0 0;
+        width: 80%;
+        min-width: 90px;
+    };
+`;
 
 const Icon = styled.div`
     font-size: 18px;
@@ -114,6 +129,9 @@ const TextInfo = styled.div`
         line-height: 24px;
         color: ${({ theme }) => theme.text};
     }
+    @media only screen and (max-width:735px){
+        display: none;
+    };
 `;
 
 const Count = styled.div`
@@ -130,6 +148,7 @@ const Account = styled.h1`
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    margin-bottom: -6px;
 `;
 
 const CountSection = styled.section`
@@ -162,9 +181,15 @@ const CountInfo = styled.div`
 
 const InfoRow = styled.section`
     display: flex;
+    width: 100%;
     flex-direction: row;
     align-items: center;
     margin-bottom: 20px;
+    @media only screen and (max-width:735px){
+        flex-direction: column;
+        align-items: flex-start;
+        margin-bottom: 5px;
+    };
 `;
 
 
@@ -185,6 +210,16 @@ const AvatarWrap = styled.div`
     justify-content: center;
     margin-right: 30px;
     flex: 1;
+    a{
+        @media only screen and (max-width:735px){
+        width: 77px;
+        height: 77px;
+    };
+    }
+    @media only screen and (max-width:735px){
+        width: 77px;
+        flex: 0;
+    };
 `;
 
 const Photo = styled(Link) <{ img: string }>`
@@ -207,6 +242,9 @@ const Info = styled.header`
     display: flex;
     flex-direction: row;
     margin-bottom: 44px;
+    @media only screen and (max-width:735px){
+        margin: 16px 16px 24px;
+    };
 `;
 
 const Container = styled.div`
@@ -216,7 +254,7 @@ const Container = styled.div`
     width: 100%;
     position: absolute;
     top: 0;
-    padding: 30px 0 0;
+    padding: 0;
     @media only screen and (min-width:736px){
         padding: 30px 20px 0;
         box-sizing: content-box;

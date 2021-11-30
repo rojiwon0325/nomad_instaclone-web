@@ -2,7 +2,7 @@ import React from 'react';
 import { createGlobalStyle } from 'styled-components';
 import reset from 'styled-reset';
 import Provider from 'Providers';
-import { Route, Routes, Navigate, Outlet, Link } from 'react-router-dom';
+import { Route, Routes, Navigate, Outlet } from 'react-router-dom';
 import { Home, Join, Login, Profile } from 'Routes';
 import { LoginLayout } from 'Components';
 

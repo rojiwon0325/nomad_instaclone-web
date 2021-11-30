@@ -1,53 +1,25 @@
 import { ApolloProvider } from '@apollo/client';
-import { Layout } from 'Components';
-import React, { Suspense, useEffect } from 'react';
-import { CookiesProvider } from 'react-cookie';
-import { Route, Routes, Navigate } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
-import { Home, Join, Login } from 'Routes';
-import { client } from 'State/apollo';
-import { isDarkMode } from 'State/recoilState';
-import { DarkTheme, LightTheme } from 'State/theme';
-import { createGlobalStyle, ThemeProvider } from 'styled-components';
+import React from 'react';
+import { createGlobalStyle } from 'styled-components';
 import reset from 'styled-reset';
+import Provider from 'Providers';
+import { Route, Routes, Navigate } from 'react-router-dom';
+import { Layout } from 'Components';
+import { Home, Join, Login } from 'Routes';
 
-
-function App() {
-  const [isDark, setTheme] = useRecoilState(isDarkMode);
-
-  useEffect(() => {
-    const handleChange = (e: MediaQueryListEvent) => {
-      setTheme(e.matches);
-    }
-
-    window.matchMedia('(prefers-color-scheme: dark)')
-      .addEventListener("change", handleChange);
-
-    return window.matchMedia('(prefers-color-scheme: dark)')
-      .removeEventListener("change", handleChange);
-  }, [setTheme]);
-
-  return (
-    <ThemeProvider theme={isDark ? DarkTheme : LightTheme}>
-      <Suspense fallback={<div>suspending...</div>}>
-        <ApolloProvider client={client}>
-          <CookiesProvider>
-            <GlobalStyle />
-            <Routes>
-              <Route path="/" element={<Layout />}>
-                <Route index element={<Home />} />
-                <Route path="login" element={<Login />} />
-                <Route path="join" element={<Join />} />
-                <Route path="*" element={<Navigate replace to="/" />} />
-              </Route>
-            </Routes>
-          </CookiesProvider>
-        </ApolloProvider>
-      </Suspense>
-    </ThemeProvider>
-
-  );
-}
+const App: React.FC = () => (
+  <Provider>
+    <GlobalStyle />
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<Home />} />
+        <Route path="login" element={<Login />} />
+        <Route path="join" element={<Join />} />
+        <Route path="*" element={<Navigate replace to="/" />} />
+      </Route>
+    </Routes>
+  </Provider>
+);
 
 const GlobalStyle = createGlobalStyle`
   ${reset}
@@ -83,4 +55,4 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
-export default App as React.FC;
+export default App;

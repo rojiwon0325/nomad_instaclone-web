@@ -1,12 +1,11 @@
 import React from 'react';
-import { useApolloClient, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import { seePost } from "Interfaces/Igql/seePost";
 import { SEEPOST_QUERY } from "State/Query/post";
 import Post from 'Components/Post';
 
 
 const Home: React.FC = () => {
-    const client = useApolloClient();
     const { data } = useQuery<seePost>(SEEPOST_QUERY);
     if (data === undefined || data.seePost === null) {
         return <div>POST NOT FOUND</div>;

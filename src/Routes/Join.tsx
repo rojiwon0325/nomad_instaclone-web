@@ -30,7 +30,7 @@ const Join: React.FC = () => {
         onCompleted: ({ newAccount: { ok, error } }) => {
             if (ok) {
                 const { account, password } = getValues();
-                navigate("/login", { state: { account, password } });
+                navigate("/account/login", { state: { account, password } });
             } else {
                 setError("result", { message: error ?? undefined });
             }
@@ -75,7 +75,7 @@ const Join: React.FC = () => {
             <FormWrap>
                 <LinkWrap>
                     계정이 있으신가요?&nbsp;
-                    <LinkButton to="/login">로그인</LinkButton>
+                    <LinkButton to="/account/login">로그인</LinkButton>
                 </LinkWrap>
             </FormWrap>
         </AuthLayout>

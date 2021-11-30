@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import Header from './Header';
 import Title from './Title';
 
-const Layout: React.FC = () => {
+const LoginLayout: React.FC = () => {
     const navigate = useNavigate();
     const { pathname } = useLocation();
     const [account, setAccount] = useRecoilState(MyAccount);
@@ -15,25 +15,25 @@ const Layout: React.FC = () => {
 
     useEffect(() => {
         if (getAccount) {
-            if (pathname.includes('login') || pathname.includes('join')) {
+            if (pathname.includes('account')) {
                 navigate("/");
             }
         } else if (account) {
             removeCookie('jwt');
             setAccount(null);
-            if (!pathname.includes('login') && !pathname.includes('join')) {
-                navigate("/login");
+            if (!pathname.includes('account')) {
+                navigate("/account");
             }
         } else {
-            if (!pathname.includes('login') && !pathname.includes('join')) {
-                navigate("/login");
+            if (!pathname.includes('account')) {
+                navigate("/account");
             }
         }
     }, [navigate, pathname, account, setAccount, getAccount]);
 
     return (
         <>
-            {pathname.includes('login') || pathname.includes('join') ? null
+            {pathname.includes('account') ? null
                 : <><div style={{ paddingTop: 54 }} /><Header /></>}
             <Container>
                 <Title />
@@ -51,6 +51,8 @@ const Container = styled.main`
     align-items: center;
     justify-content: center;
     order: 4;
+    background-color: ${({ theme }) => theme.background};
+    position: relative;
 `;
 
-export default Layout;
+export default LoginLayout;

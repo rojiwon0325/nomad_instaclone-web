@@ -2,32 +2,41 @@ import React from 'react';
 import { createGlobalStyle } from 'styled-components';
 import reset from 'styled-reset';
 import Provider from 'Providers';
-import { Route, Routes, Navigate } from 'react-router-dom';
-import { Layout } from 'Components';
+import { Route, Routes, Navigate, Outlet, Link } from 'react-router-dom';
 import { Home, Join, Login, Profile } from 'Routes';
+import { LoginLayout } from 'Components';
 
 const App: React.FC = () => (
   <Provider>
     <GlobalStyle />
     <Routes>
-      <Route path="/" element={<Layout />}>
+      <Route path="/" element={<LoginLayout />}>
         <Route index element={<Home />} />
-        <Route path=":account" element={<Profile />} />
-        <Route path="login" element={<Login />} />
-        <Route path="join" element={<Join />} />
+
+        <Route path="account" element={<Outlet />}>
+          <Route index element={<Login />} />
+          <Route path="login" element={<Login />} />
+          <Route path="join" element={<Join />} />
+        </Route>
+
+        <Route path="user" element={<Outlet />}>
+          <Route path=":account" element={<Profile />} />
+        </Route>
+
+        <Route path="post" element={<Outlet />}>
+          <Route path=":postId" element={null} />
+        </Route>
+
         <Route path="*" element={<Navigate replace to="/" />} />
       </Route>
     </Routes>
-  </Provider>
+  </Provider >
 );
 
 const GlobalStyle = createGlobalStyle`
   ${reset}
   html{
-    background-color: ${props => props.theme.background};
-  }
-  input{
-    all: unset;
+    background-color: ${props => props.theme.bar};
   }
   *{
     box-sizing: border-box;

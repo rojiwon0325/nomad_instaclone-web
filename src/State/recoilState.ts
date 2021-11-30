@@ -17,7 +17,7 @@ export const MyAccount = atom<string | null>({
     default: null,
 });
 
-export const getMyAccount = selector<string | null>({
+export const getMyAccount = selector({
     key: "MyAccount/Get",
     get: async ({ get }) => {
         const token = getCookie('jwt');
@@ -28,6 +28,6 @@ export const getMyAccount = selector<string | null>({
             return null;
         }
         const { data: { getMe } } = await client.query<getMe>({ query: GETME_QUERY });
-        return getMe;
+        return getMe?.account ?? null;
     },
 });

@@ -1,9 +1,9 @@
-import { useMutation, gql } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { newComment } from 'Interfaces/Igql/newComment';
 import { seePost_seePost_detail } from 'Interfaces/Igql/seePost';
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { NEWCOMMENT_MUTATION } from 'State/Query/post';
+import { COMMENT_FRAGMENT, NEWCOMMENT_MUTATION } from 'State/Query/post';
 import styled from 'styled-components';
 
 const CommentInput: React.FC<{ postId: number, rootId?: number }> = ({ postId, rootId }) => {
@@ -16,19 +16,7 @@ const CommentInput: React.FC<{ postId: number, rootId?: number }> = ({ postId, r
             if (result.data?.newComment.ok && result.data.newComment.comment) {
                 const cmt = cache.writeFragment({
                     data: result.data.newComment.comment,
-                    fragment: gql`
-                        fragment BSName on Comment{
-                            id
-                            text
-                            rootId
-                            account
-                            createdAt
-                            _count{
-                                reComment
-                            }
-                            isMine
-                        }
-                    `,
+                    fragment: COMMENT_FRAGMENT,
                 });
                 cache.modify({
                     id: `Post:${postId}`,

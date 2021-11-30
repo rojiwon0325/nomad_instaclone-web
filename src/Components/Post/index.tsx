@@ -5,15 +5,15 @@ import Photos from "./Photos";
 import { Item } from "./PostPure";
 import Buttons from "./Buttons";
 import Text from "./Text";
-import { seePost_seePost, seePost_seePost_detail, seePost_seePost__count } from "Interfaces/Igql/seePost";
 import { SEECOMMENT_QUERY } from "State/Query/post";
 import { useQuery } from "@apollo/client";
 import { seeComment } from "Interfaces/Igql/seeComment";
 import CommentInput from "./CommentInput";
+import { Post as IPost_pre, Post_detail, Post__count } from "Interfaces/Igql/Post";
 
-interface IPost extends seePost_seePost {
-    _count: seePost_seePost__count;
-    detail: seePost_seePost_detail;
+interface IPost extends IPost_pre {
+    _count: Post__count;
+    detail: Post_detail;
 }
 
 const Post: React.FC<{ data: IPost }> = ({ data: { id: postId, photo, _count, detail } }) => {
@@ -23,7 +23,7 @@ const Post: React.FC<{ data: IPost }> = ({ data: { id: postId, photo, _count, de
     });
     return (
         <Container>
-            <PostHeader user={detail.account} imgPath="test.jpg" />
+            <PostHeader user={detail.account} imgPath={detail.avatarUrl} />
             <Photos photos={photo} />
             <Bottom>
                 <Buttons postId={postId} isLiked={detail.isLiked} />

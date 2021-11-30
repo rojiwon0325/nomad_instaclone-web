@@ -1,5 +1,25 @@
 import { gql } from "@apollo/client";
 
+export const USER_FRAGMENT = gql`
+    fragment User on User{
+        username
+        account
+        avatarUrl
+        isMe
+        isFollowing
+        profile{
+            isPublic
+            bio
+            _count{
+                post
+                follower
+                following
+            }
+        }
+    }
+`;
+
+
 export const LOGIN_MUTATION = gql`
     mutation login($account:String! $password:String!){
         login(account: $account password:$password){
@@ -21,6 +41,18 @@ export const NEWACCOUNT_MUTATION = gql`
 
 export const GETME_QUERY = gql`
     query getMe{
-        getMe
+        getMe{
+            ...User
+        }
     }
+    ${USER_FRAGMENT}
+`;
+
+export const SEEPROFILE_QUERY = gql`
+    query seeProfile($account: String!){
+        seeProfile(account: $account){
+            ...User
+        }
+    }
+    ${USER_FRAGMENT}
 `;

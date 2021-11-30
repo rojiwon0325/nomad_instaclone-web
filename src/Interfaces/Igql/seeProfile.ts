@@ -4,33 +4,37 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: getMe
+// GraphQL query operation: seeProfile
 // ====================================================
 
-export interface getMe_getMe_profile__count {
+export interface seeProfile_seeProfile_profile__count {
   __typename: "Profile_count";
   post: number;
   follower: number;
   following: number;
 }
 
-export interface getMe_getMe_profile {
+export interface seeProfile_seeProfile_profile {
   __typename: "Profile";
   isPublic: boolean;
   bio: string;
-  _count: getMe_getMe_profile__count | null;
+  _count: seeProfile_seeProfile_profile__count | null;
 }
 
-export interface getMe_getMe {
+export interface seeProfile_seeProfile {
   __typename: "User";
   username: string;
   account: string;
   avatarUrl: string;
   isMe: boolean | null;
   isFollowing: boolean | null;
-  profile: getMe_getMe_profile | null;
+  profile: seeProfile_seeProfile_profile | null;
 }
 
-export interface getMe {
-  getMe: getMe_getMe | null;
+export interface seeProfile {
+  seeProfile: seeProfile_seeProfile | null;
+}
+
+export interface seeProfileVariables {
+  account: string;
 }

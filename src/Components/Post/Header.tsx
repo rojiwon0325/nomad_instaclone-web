@@ -13,7 +13,7 @@ const PostHeader: React.FC<{ imgPath: string, user: string }> = ({ imgPath, user
             <header>
                 <Avatar imgPath={imgPath} userId={user} size={32} />
                 <div style={{ paddingLeft: 14 }} />
-                <User to={`/${user}`}>
+                <User to={`/user/${user}`}>
                     {user}
                 </User>
             </header>
@@ -41,6 +41,9 @@ const Header = styled(Item)`
         padding: 14px 4px 14px 16px;
         position: relative;
         background-color: ${({ theme }) => theme.bar};
+        a{
+            pointer-events: auto;
+        }
     }
 `;
 const Setting = styled.div`

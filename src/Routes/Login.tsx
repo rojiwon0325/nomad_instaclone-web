@@ -85,7 +85,7 @@ const Login: React.FC = () => {
             <FormWrap>
                 <LinkWrap>
                     계정이 없으신가요?&nbsp;
-                    <LinkButton to="/join">가입하기</LinkButton>
+                    <LinkButton to="/account/join">가입하기</LinkButton>
                 </LinkWrap>
             </FormWrap>
         </AuthLayout>

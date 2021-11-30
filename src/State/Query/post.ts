@@ -1,8 +1,22 @@
 import { gql } from "@apollo/client";
 
-export const SEEPOST_QUERY = gql`
-query seePost($id:Int $offset:Int){
-    seePost(id:$id offset:$offset) {
+export const COMMENT_FRAGMENT = gql`
+    fragment Comment on Comment{
+        id
+        text
+        rootId
+        account
+        createdAt
+        _count{
+            reComment
+        }
+        isMine
+    }
+`;
+
+
+export const POST_FRAGMENT = gql`
+    fragment Post on Post{
         id
         photo
         _count{
@@ -16,62 +30,57 @@ query seePost($id:Int $offset:Int){
             account
             isLiked
             createdAt
+            avatarUrl
             comments{
-                id
-                text
-                rootId
-                account
-                createdAt
-                _count{
-                    reComment
-                }
-                isMine
+                ...Comment
             }
         }
     }
-}
+    ${COMMENT_FRAGMENT}
+`;
+
+export const SEEPOST_QUERY = gql`
+    query seePost($id:Int $offset:Int){
+        seePost(id:$id offset:$offset){
+            ...Post
+        }
+    }
+    ${POST_FRAGMENT}
 `;
 
 export const DOLIKE_MUTATION = gql`
-mutation doLike($id: Int!){
-    doLike(id:$id){
-        ok
-        error
-        type
+    mutation doLike($id: Int!){
+        doLike(id:$id){
+            ok
+            error
+            type
+        }
     }
-}
 `;
 
 export const DOUNLIKE_MUTATION = gql`
-mutation doUnLike($id: Int!){
-doUnLike(id:$id){
-    ok
-    error
-    type
-}
-}
+    mutation doUnLike($id: Int!){
+        doUnLike(id:$id){
+            ok
+            error
+            type
+        }
+    }
 `;
 
 export const SEECOMMENT_QUERY = gql`
-    query seeComment($postId:Int! $rootId:Int $offset:Int, $take:Int){
+    query seeComment($postId:Int! $rootId:Int $offset:Int $take:Int){
         seeComment(postId:$postId rootId:$rootId offset:$offset take:$take){
-            id
-            text
-            rootId
-            account
-            createdAt
-            _count{
-                reComment
-            }
-            isMine
+            ...Comment
         }
     }
+    ${COMMENT_FRAGMENT}
 `;
 
 export const DELETECOMMENT_MUTATION = gql`
     mutation deleteComment($id: Int!){
         deleteComment(id:$id){
-            ok,
+            ok
             error
         }
     }
@@ -83,16 +92,18 @@ export const NEWCOMMENT_MUTATION = gql`
             ok
             error
             comment{
-                id
-                text
-                rootId
-                account
-                createdAt
-                _count{
-                    reComment
-                }
-                isMine
+                ...Comment
             }
         }
     }
+    ${COMMENT_FRAGMENT}
+`;
+
+export const SEEFEED_QUERY = gql`
+    query seeFeed($account:String! $offset:Int){
+        seeFeed(account:$account, offset: $offset){
+            ...Post
+        }
+    }
+    ${POST_FRAGMENT}
 `;

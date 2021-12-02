@@ -6,7 +6,7 @@ import { deleteFollowing } from "Interfaces/Igql/deleteFollowing";
 import { requestFollow } from "Interfaces/Igql/requestFollow";
 import { seeFeed } from "Interfaces/Igql/seeFeed";
 import { seeProfile } from "Interfaces/Igql/seeProfile";
-import { useParams } from "react-router";
+import { Outlet, useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { DELETEFOLLOWING_MUTATION, GETME_QUERY, REQUESTFOLLOW_MUTATION, SEEPROFILE_QUERY } from "State/Query/account";
 import { SEEFEED_QUERY } from "State/Query/post";
@@ -42,6 +42,7 @@ const Profile: React.FC = () => {
         return <div>USER NOT FOUND</div>;
     }
     const { seeProfile: { avatarUrl, account: user, profile, username, isFollowing, isMe, isRequesting } } = data;
+
     return (
         <Container>
             <Info>
@@ -78,7 +79,7 @@ const Profile: React.FC = () => {
             <Feed>
                 {feedData?.seeFeed ?
                     feedData.seeFeed.map((fed) => (
-                        <Photo key={fed.id} img={fed.photo[0] ?? ""} to={`/post/${fed.id}`}>
+                        <Photo key={fed.id} img={fed.photo[0] ?? ""} to={`/${account}/${fed.id}`} state={{ background: "profile" }}>
                             <div style={{ paddingBottom: "100%" }} />
                             <FeedInfo>
                                 <Icon>
@@ -94,6 +95,7 @@ const Profile: React.FC = () => {
                     ))
                     : null}
             </Feed>
+            <Outlet />
         </Container>
     );
 };
@@ -269,9 +271,7 @@ const Container = styled.div`
     flex-grow: 1;
     max-width: 935px;
     width: 100%;
-    position: absolute;
-    top: 0;
-    padding: 0;
+    position: relative;
     @media only screen and (min-width:736px){
         padding: 30px 20px 0;
         box-sizing: content-box;

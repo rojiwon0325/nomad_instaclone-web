@@ -39,7 +39,7 @@ const Text: React.FC<{ user: string, text: string[], id?: number }> = ({ user, t
                     setOver(true);
                 }
             }}>
-                <User to={`/user/${user}`}>{user}</User>
+                <User to={`/${user}`}>{user}</User>
                 &nbsp;
                 {text.join('\n')}
             </Content>

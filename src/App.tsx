@@ -3,33 +3,31 @@ import { createGlobalStyle } from 'styled-components';
 import reset from 'styled-reset';
 import Provider from 'Providers';
 import { Route, Routes, Navigate, Outlet } from 'react-router-dom';
-import { Home, Join, Login, Profile } from 'Routes';
-import { LoginLayout } from 'Components';
+import { Home, Join, Login, Profile, Post } from 'Routes';
+import { Modal } from 'Components';
 
 const App: React.FC = () => (
   <Provider>
     <GlobalStyle />
     <Routes>
-      <Route path="/" element={<LoginLayout />}>
-        <Route index element={<Home />} />
-
+      <Route path="/" element={<Home />}>
         <Route path="account" element={<Outlet />}>
           <Route index element={<Login />} />
           <Route path="login" element={<Login />} />
           <Route path="join" element={<Join />} />
         </Route>
-
-        <Route path="user" element={<Outlet />}>
-          <Route path=":account" element={<Profile />} />
+        <Route path=":account" element={<Profile />}>
+          <Route path=":postId" element={<Modal><Post /></Modal>} />
         </Route>
 
         <Route path="post" element={<Outlet />}>
-          <Route path=":postId" element={null} />
+          <Route index element={<Navigate replace to="/" />} />
+          <Route path=":postId" element={<Modal><Post /></Modal>} />
         </Route>
 
         <Route path="*" element={<Navigate replace to="/" />} />
       </Route>
-    </Routes>
+    </Routes >
   </Provider >
 );
 

@@ -13,7 +13,7 @@ const PostHeader: React.FC<{ imgPath: string, user: string }> = ({ imgPath, user
             <header>
                 <Avatar imgPath={imgPath} userId={user} size={32} />
                 <div style={{ paddingLeft: 14 }} />
-                <User to={`/user/${user}`}>
+                <User to={`/${user}`}>
                     {user}
                 </User>
             </header>

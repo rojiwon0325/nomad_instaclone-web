@@ -5,11 +5,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { doLike } from "Interfaces/Igql/doLike";
 import { doUnLike } from "Interfaces/Igql/doUnLike";
 import { seePost_seePost_detail, seePost_seePost__count } from "Interfaces/Igql/seePost";
+import { useNavigate, useLocation } from "react-router-dom";
 import { DOLIKE_MUTATION, DOUNLIKE_MUTATION } from "State/Query/post";
 import styled from "styled-components";
 
 
 const Buttons: React.FC<{ postId: number, isLiked: boolean }> = ({ postId, isLiked }) => {
+    const { pathname } = useLocation();
+    const navigate = useNavigate();
     const updateCache = (cache: ApolloCache<any>, type: boolean | null) =>
         cache.modify({
             id: `Post:${postId}`, fields: {
@@ -42,7 +45,11 @@ const Buttons: React.FC<{ postId: number, isLiked: boolean }> = ({ postId, isLik
         if (loadingLike || loadingUnLike) { return; }
         return isLiked ? doUnLike() : doLike();
     };
-    const ClickComment = () => { console.log("comment") };
+    const ClickComment = () => {
+        if (pathname === "/") {
+            navigate(`/post/${postId}`, { state: { background: 'home' } });
+        }
+    };
     const ClickShare = () => { console.log("share") };
     const ClickBookmark = () => { console.log("bookmark") };
 

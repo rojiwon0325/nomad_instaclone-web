@@ -6,10 +6,9 @@ import styled from 'styled-components';
 
 const Header: React.FC = () => {
     return (
-        <Absolute>
+        <div style={{ width: "100%", paddingTop: 54 }}>
             <HeaderContainer>
                 <HeaderContent>
-                    Header
                     <Left />
                     <Center />
                     <Right>
@@ -19,17 +18,9 @@ const Header: React.FC = () => {
                     </Right>
                 </HeaderContent>
             </HeaderContainer>
-        </Absolute>
+        </div>
     );
 };
-
-const Absolute = styled.div`
-    width: 100vw;
-    height: 54px;
-    position: absolute;
-    top:0;
-    order: 0;
-`;
 
 const HeaderContainer = styled.div`
     background-color: ${({ theme }) => theme.bar};
@@ -42,7 +33,7 @@ const HeaderContainer = styled.div`
     justify-content: center;
     position: fixed;
     top:0;
-    z-index: 100;
+    z-index: 10;
 `;
 
 const HeaderContent = styled.div`

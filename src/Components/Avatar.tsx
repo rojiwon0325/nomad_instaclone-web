@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 const Avatar: React.FC<{ imgPath: string, userId?: string, size?: number }> = ({ imgPath, size, userId }) => {
 
     return (
-        <Container to={`/user/${userId ?? ""}`} size={size}>
+        <Container to={`/${userId ?? ""}`} size={size}>
             <Img src={imgPath} onError={(e) => e.currentTarget.src = "https://t1.daumcdn.net/cfile/tistory/2513B53E55DB206927"} />
         </Container>
     );

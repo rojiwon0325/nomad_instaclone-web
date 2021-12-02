@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import PostHeader from "./Header";
 import Photos from "./Photos";
@@ -7,7 +7,7 @@ import Buttons from "./Buttons";
 import Text from "./Text";
 import { SEECOMMENT_QUERY } from "State/Query/post";
 import { useQuery } from "@apollo/client";
-import { seeComment } from "Interfaces/Igql/seeComment";
+import { seeComment, seeComment_seeComment } from "Interfaces/Igql/seeComment";
 import CommentInput from "./CommentInput";
 import { Feed, Feed__count } from "Interfaces/Igql/Feed";
 import { Post_detail } from "Interfaces/Igql/Post_detail";
@@ -17,13 +17,23 @@ interface IPost extends Feed {
     detail: Post_detail;
 }
 
-const Post: React.FC<{ data: IPost }> = ({ data: { id: postId, photo, _count, detail } }) => {
+const Post: React.FC<{ data: IPost, isDetail?: boolean }> = ({ data: { id: postId, photo, _count, detail }, isDetail = false }) => {
+    const [comments, setComments] = useState<seeComment_seeComment[]>([]);
     const date = new Date(Number(detail.createdAt)).toLocaleDateString("ko");
-    const { data: commentData } = useQuery<seeComment>(SEECOMMENT_QUERY, {
-        variables: { postId, take: 2 },
+    const { data: commentData, refetch } = useQuery<seeComment>(SEECOMMENT_QUERY, {
+        variables: { postId, take: isDetail ? 10 : 2 },
     });
+    useEffect(() => {
+        if (commentData?.seeComment) {
+            setComments(isDetail ? commentData.seeComment : commentData.seeComment.slice(0, 2));
+        }
+        if (isDetail) {
+            refetch({ postId, take: 10 });
+        }
+    }, [commentData, isDetail, refetch, postId]);
+
     return (
-        <Container>
+        <Container isDetail={isDetail ?? false}>
             <PostHeader user={detail.account} imgPath={detail.avatarUrl} />
             <Photos photos={photo} />
             <Bottom>
@@ -35,7 +45,7 @@ const Post: React.FC<{ data: IPost }> = ({ data: { id: postId, photo, _count, de
                 </LikeWrap>
                 <TextInfo>
                     <Text user={detail.account} text={detail.caption} key={postId + "caption"} />
-                    {commentData?.seeComment?.map(({ account, text, id }) => <Text user={account} text={text} id={id} key={id + "comment"} />)}
+                    {comments.map(({ account, text, id }) => <Text user={account} text={text} id={id} key={id + "comment"} />)}
                     {detail.comments.map(({ account, text, id }) => <Text user={account} text={text} id={id} key={id + "comment"} />)}
                 </TextInfo>
                 <CreatedAt>
@@ -104,7 +114,7 @@ const CreatedAt = styled.div`
     }
 `;
 
-const Container = styled.article`
+const Container = styled.article<{ isDetail: boolean }>`
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -114,13 +124,15 @@ const Container = styled.article`
     margin: 0;
     padding: 0;
     border: 0 solid ${({ theme }) => theme.border};
+    width: 100%;
     min-width: 335px;
+    max-width: 602px;
     @media only screen and (max-width:735px){
-        margin-bottom: 15px;
+        margin-bottom: ${({ isDetail }) => isDetail ? 0 : "15px"};
     };
     @media only screen and (min-width:640px){
         margin: 0 -1px;
-        margin-bottom: 24px;
+        margin-bottom: ${({ isDetail }) => isDetail ? 0 : "24px"};
         border: 1px solid ${({ theme }) => theme.border};
         border-radius: 3px;
     };

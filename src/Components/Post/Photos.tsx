@@ -52,15 +52,16 @@ const PhotoList = styled.ul`
 const Photo = styled.li`
     padding-left: 100%;
     height: 100%;
-    background-color:black;
+    background-color: ${({ theme }) => theme.background};
     position: relative;
     transition: all .2s ease-in-out;
     transform: translateX(-100%);
     img{
         position: absolute;
+        top: 50%;
         left: 0;
+        transform: translateY(-50%);
         width: 100%;
-        height: 100%;
     }
 `;
 
@@ -79,8 +80,11 @@ const Pagination = styled.div<{ page: number }>`
     display: flex;
     justify-content: center;
     align-items: center;
-    position: relative;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
     bottom: -21px;
+    z-index: 1;
     div{
         z-index: 2;
         margin-right: 4px;

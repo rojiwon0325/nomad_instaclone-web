@@ -8,6 +8,7 @@ export const LightTheme: DefaultTheme = {
     text: "rgb(38,38,38)",
     subtext: "rgba(142,142,142)",
     notification: "rgb(237, 73, 86)",
+    blur: "rgba(250,250,250,0.5)"
 };
 
 export const DarkTheme: DefaultTheme = {
@@ -18,4 +19,5 @@ export const DarkTheme: DefaultTheme = {
     text: "rgb(217,217,217)",
     subtext: "rgb(113,113,113)",
     notification: "rgb(237, 73, 86)",
+    blur: "rgba(0,0,0,0.5)"
 };

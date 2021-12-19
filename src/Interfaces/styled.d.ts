@@ -9,5 +9,6 @@ declare module "styled-components" {
         text: string;
         subtext: string;
         notification: string;
+        blur: string;
     }
 }

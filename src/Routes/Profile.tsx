@@ -132,7 +132,7 @@ const FeedInfo = styled.div`
     height: 100%;
     top: 0;
     left: 0;
-    background-color: rgba(0,0,0,0.5);
+    background-color: ${({ theme }) => theme.blur};
     color: white;
     opacity: 0;
     pointer-events: auto;

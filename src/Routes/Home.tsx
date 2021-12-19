@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useLazyQuery, useQuery } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import { seePost } from "Interfaces/Igql/seePost";
 import { SEEPOST_QUERY } from "State/Query/post";
 import Post from 'Components/Post';

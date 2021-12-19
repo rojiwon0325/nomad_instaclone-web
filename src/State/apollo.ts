@@ -12,7 +12,7 @@ const auth = setContext((_, { headers }) => {
     }
 });
 
-const server = createHttpLink({ uri: "http://localhost:4000/graphql" });
+const server = createHttpLink({ uri: "https://rojiwon-nomad-instaclone.herokuapp.com/graphql" });
 
 export const client = new ApolloClient({
     link: auth.concat(server),

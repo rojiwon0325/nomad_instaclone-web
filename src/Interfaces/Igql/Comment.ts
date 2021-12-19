@@ -15,7 +15,7 @@ export interface Comment__count {
 export interface Comment {
   __typename: "Comment";
   id: number;
-  text: string[];
+  text: string;
   rootId: string | null;
   account: string;
   createdAt: string;

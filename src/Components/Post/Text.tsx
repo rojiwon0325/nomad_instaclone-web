@@ -20,7 +20,7 @@ const More: React.FC = () => {
     return <Btn {...handler}>더 보기</Btn>;
 };
 
-const Text: React.FC<{ user: string, text: string[], id?: number }> = ({ user, text, id }) => {
+const Text: React.FC<{ user: string, text: string, id?: number }> = ({ user, text, id }) => {
     const [over, setOver] = useState(false);
     const account = useRecoilValue(getMyAccount);
     const [deleteComment] = useMutation<deleteComment>(DELETECOMMENT_MUTATION, {
@@ -41,7 +41,7 @@ const Text: React.FC<{ user: string, text: string[], id?: number }> = ({ user, t
             }}>
                 <User to={`/${user}`}>{user}</User>
                 &nbsp;
-                {text.join('\n')}
+                {text}
             </Content>
             {over ? <More /> : null}
             {account === user && id ?

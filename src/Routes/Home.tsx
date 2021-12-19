@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useQuery } from "@apollo/client";
+import { useLazyQuery, useQuery } from "@apollo/client";
 import { seePost } from "Interfaces/Igql/seePost";
 import { SEEPOST_QUERY } from "State/Query/post";
 import Post from 'Components/Post';
@@ -16,12 +16,16 @@ const Home: React.FC = () => {
     const { pathname } = useLocation();
     const [account, setAccount] = useRecoilState(MyAccount);
     const getAccount = useRecoilValue(getMyAccount);
-    const { data } = useQuery<seePost>(SEEPOST_QUERY);
+    const [QueryStartFn, { data }] = useLazyQuery<seePost>(SEEPOST_QUERY);
     const background = state?.background ?? null;
     useEffect(() => {
         if (getAccount) {
             if (pathname.includes('account')) {
                 navigate("/");
+            }
+            if (data === undefined) {
+                QueryStartFn();
+
             }
         } else if (account) {
             removeCookie('jwt');
@@ -34,7 +38,7 @@ const Home: React.FC = () => {
                 navigate("/account");
             }
         }
-    }, [navigate, pathname, account, setAccount, getAccount, data]);
+    }, [navigate, pathname, account, setAccount, getAccount, data, QueryStartFn]);
 
     return (
         <Container>

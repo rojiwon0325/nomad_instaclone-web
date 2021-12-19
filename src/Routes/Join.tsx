@@ -46,18 +46,18 @@ const Join: React.FC = () => {
                 </LogoWrap>
                 <form onSubmit={handleSubmit((variables) => loading ? null : join({ variables }))}>
                     <InputWrap>
-                        {errors?.username?.message}
-                        <Default.Input
-                            {...usernameRegister}
-                            onChange={(e) => { clearErrors(); usernameRegister.onChange(e) }}
-                            type="text" placeholder="Username" style={{ height: 38 }} />
-                    </InputWrap>
-                    <InputWrap>
                         {errors?.account?.message}
                         <Default.Input
                             {...accountRegister}
                             onChange={(e) => { clearErrors(); accountRegister.onChange(e) }}
                             type="text" placeholder="Account" style={{ height: 38 }} />
+                    </InputWrap>
+                    <InputWrap>
+                        {errors?.username?.message}
+                        <Default.Input
+                            {...usernameRegister}
+                            onChange={(e) => { clearErrors(); usernameRegister.onChange(e) }}
+                            type="text" placeholder="Username" style={{ height: 38 }} />
                     </InputWrap>
                     <InputWrap>
                         {errors?.password?.message}

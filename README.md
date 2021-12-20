@@ -1,16 +1,3 @@
 # INSTACLONE FRONTEND WEB
 
-## Route
-
-### /
-- [ ] 로그인/로그아웃 상태인식
-- [ ] 로그아웃 상태라면 /login 으로 이동
-- [ ] 로그인 상태라면 post리스트 보여주기
-
-### /login
-- [ ] 로그인 기능
-- [ ] 로그인 상태라면 / 으로 이동
-### /join
-- [ ] 회원가입 기능
-- [ ] 로그인 상태라면 / 으로 이동
-
+https://upbeat-pare-26d01c.netlify.app
